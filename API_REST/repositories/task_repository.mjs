@@ -1,7 +1,7 @@
 import pool from "../config/database.mjs"
 import {User, Favourites, /*Sales,*/ Games} from "../models/task_models.mjs"
 
-async function addGame(name_game, price, description) {
+async function addGame(name_game, price, image) {
     const session = await pool.connect();
 
     try {
@@ -11,8 +11,8 @@ async function addGame(name_game, price, description) {
 
         if (existing.rows.length === 0) {
             await session.query(`
-                INSERT INTO juegos (name_game, price, description)
-                VALUES ('${name_game}', ${price}, '${description}')
+                INSERT INTO juegos (name_game, price, image)
+                VALUES ('${name_game}', ${price}, '${image}')
             `);
 
             console.log(`Juego insertado: ${name_game}`);

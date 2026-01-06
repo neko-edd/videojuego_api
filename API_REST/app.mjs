@@ -13,3 +13,7 @@ app.use(express.urlencoded({extended: true}));
 app.use(routerLogin); //TODAS LAS RUTAS DE DATOS TIENEN DELANTE /api (TE OBLIGA-RESTRICCION) 
 
 app.listen(PORT, ()=>console.log("INICIAMOS", PORT))
+
+//PARA EL CLIENTE
+/*app.set("view engine", "ejs")
+app.set("views", path.join(path.resolve("."), "uso_vistas", "views"))*/

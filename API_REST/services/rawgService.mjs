@@ -1,4 +1,5 @@
 import fetch from "node-fetch";
+import 'dotenv/config';
 
 async function obtenerJuegosRAWG() {
     const apiKey = process.env.RAWG_API_KEY;
@@ -10,6 +11,7 @@ async function obtenerJuegosRAWG() {
             throw new Error(`HTTP error! status: ${res.status}`);
         } 
         const data = await res.json();
+
         return data.results; // Array de juegos
     } catch (err) {
         console.error("Error al llamar a RAWG:", err.message);
