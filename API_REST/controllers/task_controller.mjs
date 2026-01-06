@@ -14,22 +14,25 @@ export default class task_controllers {
     }
     static async startSession(req, res) {
         const { user_name, password } = req.body
+        if(!user_name || !password){
+            return res.status(400).json({message: "Datos incompletos"})
+        }
         try {
 
-            const result = await task_repository.startSession(user_name, password)
+            const user = await task_repository.startSession(user_name, password)
 
-            if (!result) {
-                return res.status(401).json({
+            if (!user) {
+                return res.status(400).json({
                     message: "Usuario o contraseña incorrecta"
                 })
             }
 
             return res.status(200).json({
-                user: result
+                user: user
             })
         } catch (error) {
             console.error("Error login:", error.message);
-            return res.status(401).json({
+            return res.status(500).json({
                 error: "Credenciales incorrectas"
             });
         }
@@ -41,9 +44,13 @@ export default class task_controllers {
             return res.status(400).json({ message: "Datos incompletos" })
         }
         try {
-            const userCredential = await task_repository.createUser(user_name, password)
+            const userId = await task_repository.createUser(user_name, password)
+            if (!userId) {
+                return res.status(400).json({ message: "No se pudo crear el usuario" })
+            }
             return res.status(200).json({
-                userCredential
+                success: true,
+                userId
             })
 
         } catch (error) {
@@ -64,12 +71,13 @@ export default class task_controllers {
 
     static async addFavourites(req, res) {
         const { userName, gameName, price } = req.body
+        if (!userName || !gameName || price === undefined) {
+            res.status(400).json({ message: "No se ha seleccionado ningun juego" })
+        }
         try {
-            const result = await task_repository.addFavourites(userName, gameName, price)
-            if (!result) {
-                res.status(500).json({ message: "No se ha seleccionado ningun juego" })
-            }
-            res.status(200).json({ success: true, result })
+            const favourite = await task_repository.addFavourites(userName, gameName, price)
+
+            res.status(200).json({ success: true, favourite })
 
         } catch (error) {
             console.error("Error insertando favorito:", error)
@@ -81,9 +89,6 @@ export default class task_controllers {
         const { userName } = req.body
         try {
             const favourites = await task_repository.showFavourites(userName)
-            if (!favourites) {
-                res.status(500).json({ message: "No hay ningun juego en favoritos" })
-            }
 
             res.status(200).json({ favourites })
         } catch (error) {
@@ -94,18 +99,18 @@ export default class task_controllers {
 
     static async priceCart(req, res) {
         const { userName, gameName, price, activate } = req.body
-        if (!user && !game && !price && !activate) {
+        if (!userName && !gameName && price === undefined && activate === undefined) {
             return res.status(400).json({ message: "Datos incompletos" })
         }
         try {
             const carrito = await task_repository.priceCart(userName, gameName, price, activate)
             return res.status(200).json({
-                user: {
+                carrito: {
                     id: carrito.id,
-                    user_name: carrito.user_name,
-                    name_game: carrito.name_game,
+                    user_id: carrito.user_id,
+                    game_id: carrito.game_id,
                     price: carrito.price,
-                    activate: carrito.activate
+                    offer: carrito.offer
                 }
             })
         } catch (error) {
