@@ -1,6 +1,6 @@
 import express from "express"
 import taskControllers from "../controllers/task_controller.mjs"
-import { checkSession } from '../middleware/loggin.mjs'
+import { checkSession } from './middleware/loggin.mjs'
 
 const router = new express.Router()
 

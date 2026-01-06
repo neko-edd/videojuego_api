@@ -1,5 +1,6 @@
 import express from "express";
 import session from "express-session";
+const app = express();
 //MIDDLEWARE
 app.use(express.json()) //PERMITE EL USO DE JSON
 app.use(express.urlencoded({extended: true})) //DECODIFICAMOS LO QUE ESTA EN EL CUERPO DE LAS PETICIONES
@@ -10,7 +11,7 @@ app.use(session({
     cookie: {maxAge: 1000 * 60 * 30} //30 MINUTOS
 }))
 
-function checkSession(req, res, next) {
+export function checkSession(req, res, next) {
     if (!req.session || !req.session.user) {
         return res.status(401).send("Sesión no iniciada");
     }
