@@ -1,5 +1,6 @@
 import express from "express"
 import routerLogin from "./routes/task_routes.mjs"
+import 'dotenv/config';
 //import { log } from "./middleware/loggin.mjs";
 
 const PORT = 60000;

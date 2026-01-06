@@ -1,6 +1,30 @@
 import pool from "../config/database.mjs"
 import {User, Favourites, /*Sales,*/ Games} from "../models/task_models.mjs"
 
+async function addGame(name_game, price, description) {
+    const session = await pool.connect();
+
+    try {
+        const existing = await session.query(
+            `SELECT id FROM juegos WHERE name_game = '${name_game}'`
+        );
+
+        if (existing.rows.length === 0) {
+            await session.query(`
+                INSERT INTO juegos (name_game, price, description)
+                VALUES ('${name_game}', ${price}, '${description}')
+            `);
+
+            console.log(`Juego insertado: ${name_game}`);
+        } else {
+            console.log(`Juego ya existe: ${name_game}`);
+        }
+    } catch (err) {
+        console.error("Error al insertar juego:", err.message);
+    } finally {
+        session.release();
+    }
+}
 /*async function showCatalog(){
     const session = await pool.connect()
     let error = ""
@@ -262,6 +286,7 @@ export default {
     addFavourites: addFavourites,
     priceCart: priceCart,
     showCatalog,
-    showFavourites
+    showFavourites,
+    addGame
     //addOffer: addOffer
 }
