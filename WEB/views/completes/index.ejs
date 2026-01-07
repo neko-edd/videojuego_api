@@ -1,3 +1,32 @@
+<!-- <%/* include('../partials/header')*/%>
 <%/* include('../partials/header')*/%>
-<%/* include('../partials/header')*/%>
-<%/* include('../partials/header')*/%>
+<%/* include('../partials/header')*/%> -->
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Tienda de Juegos - Inicio</title>
+    <link rel="stylesheet" href="/css/index.css">
+    <script src="/js/catalog.js"></script>
+</head>
+<body>
+    <!-- <%- include('partials/header') %> -->
+    <!-- <%- include('partials/navbar') %> -->
+    <main>
+        <section id="catalogSection">
+            <h2>Catálogo de Juegos</h2>
+            <p>Encuentra tus títulos favoritos al mejor precio</p>
+
+            <div id="catalogContainer">
+                <p class="loading">Cargando catálogo...</p>
+            </div>
+        </section>
+    </main>
+    <script>
+        cargarCatalogo()
+        verificarSesion()
+    </script>
+    <!-- <%- include('partials/footer') %> -->
+</body>
+</html>
