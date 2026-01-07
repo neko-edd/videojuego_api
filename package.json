@@ -1,12 +1,30 @@
 {
-  "name": "PROYECTO_SERVIDOR",
-  "lockfileVersion": 3,
-  "requires": true,
-  "packages": {},
+  "name": "videojuego_api",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/neko-edd/videojuego_api.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "bugs": {
+    "url": "https://github.com/neko-edd/videojuego_api/issues"
+  },
+  "homepage": "https://github.com/neko-edd/videojuego_api#readme",
   "dependencies": {
+    "cors": "^2.8.5",
     "dotenv": "^17.2.3",
+    "ejs": "^3.1.10",
     "express": "^5.2.1",
-    "node-fetch": "^3.3.2",
-    "pg": "^8.16.3"
+    "express-session": "^1.18.2",
+    "pg": "^8.16.3",
+    "postgres": "^3.4.8"
   }
 }
