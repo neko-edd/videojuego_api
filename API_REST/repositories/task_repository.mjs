@@ -1,7 +1,7 @@
 import pool from "../configuration/database.mjs"
 import {User, Favourites, /*Sales,*/ Games} from "../models/task_models.mjs"
 
-async function addGame(name_game, price, image) {
+async function addGame(name_game, price, image) { //FUNCIONA
     //const session = await pool.connect();
 
     try {
@@ -23,30 +23,8 @@ async function addGame(name_game, price, image) {
         console.error("Error al insertar juego:", err.message);
     }
 }
-/*async function showCatalog(){
-    const session = await pool.connect()
-    let error = ""
-    let games = []
-    let result = null
 
-    try{
-        result = await session.query(`SELECT * FROM juegos`)
-        if(!result){
-            error.status(500).send("ERROR, HA HABIDO UN ERROR AL EXTRAER LOS DATOS DE LA BASE -- NO HAY JUEGOS")
-        }else{
-            error.sendStatus(200)
-        }
-    }catch(err){
-        console.log("ERROR AL VER LOS JUEGOS", err.message)
-    }finally{
-        session.release()
-    }
-    if(result && result.rows){
-        games = result.rows.map(row => new Games(row));
-    }
-    return games
-}*/
-async function showCatalog(){
+async function showCatalog(){ //FUNCIONA
     //const session = await pool.connect()
     let games = []
     let result = null
@@ -60,72 +38,44 @@ async function showCatalog(){
     }
     return games
 }
-/*
-async function addOffer(user, game, price, percentage){
-    const session = await pool.connect()
-    let error = ""
-    const activate = false
-    let finalPrice = price
-    let result = null
-    try{
-        if(percentage > 0){
-            finalPrice = (price - (price*(percentage / 100)))
-            const activate = true
-        }    
-        result = priceCart(user, game, finalPrice, activate)
-        if(!result){
-            error.status(500).send("ERROR EN EL REPOSITORIO", error)
-        }else{
-            error.sendStatus(200)
-        }
-    }catch(err){
-        console.error("ERROR AL INSERTAR EN VENDIDOS", err.message)
-    }finally{
-        session.release()
-    }
-    return result
-}*/
-async function showFavourites(userName){
-    //const session = await pool.connect()
-    let favourites = []
-    let result
-    try{
-        const userRes = await pool.query(`SELECT id FROM usuarios WHERE user_name='${userName}'`)
-        const userId = userRes.rows[0].id
 
-        result = await session.query(
+async function showFavourites(userName) { //FUNCIONA
+    let favourites = [];
+    try {
+        const userRes = await pool.query(
+            `SELECT id FROM usuarios WHERE user_name = $1`,
+            [userName]
+        );
+
+        if (!userRes.rows[0]) {
+            console.error("Usuario no encontrado:", userName);
+            return [];
+        }
+
+        const userId = userRes.rows[0].id; // UUID
+
+        const result = await pool.query(
             `SELECT f.id AS fav_id, f.price, j.name_game, j.image
              FROM favoritos f
-             JOIN juegos j ON f.game_id = j.id
-             WHERE f.user_id='${userId}'`
-        )
+             LEFT JOIN juegos j ON f.game_id = j.id
+             WHERE f.user_id = $1`,
+            [userId]
+        );
 
-        if(result && result.rows){
-            favourites = result.rows.map(row => new Favourites(row))
+        console.log("Favoritos DB:", result.rows);
+
+        if (result.rows) {
+            favourites = result.rows.map(row => new Favourites(row));
         }
-    }catch(err){
-        console.error("ERROR AL VER FAVORITOS", err.message)
+
+    } catch (err) {
+        console.error("ERROR AL VER FAVORITOS", err.message);
+        throw err;
     }
-    return favourites
+
+    return favourites;
 }
-/*async function priceCart(user, game, price, activate){
-    const session = await pool.connect()
-    let error = ""
-    let result
-    try{
-        result = await session.query(`INSERT INTO ventas (user_name, name_game, price, offer) VALUES ('${user}', '${game}', '${price}', '${activate}')`)
-        if(!result){
-            error.status(500).send("ERROR EN EL REPOSITORIO", error)
-        }else{
-            error.sendStatus(200)
-        }
-    }catch(err){
-        console.error("ERROR AL INSERTAR EN VENDIDOS", err.message)
-    }finally{
-        session.release()
-    }
-    return result
-}*/
+
 async function priceCart(userName, gameName, price, activate){
     //const session = await pool.connect()
     let result
@@ -146,25 +96,8 @@ async function priceCart(userName, gameName, price, activate){
     }
     return result
 }
-/*async function addFavourites(user, game, price){
-    const session = await pool.connect()
-    let error = ""
-    let result
-    try{
-        result = await session.query(`INSERT INTO favoritos (user_name, name_game, price) VALUES ('${user}', '${game}', '${price}')`)
-        if(!result){
-            error.status(500).send("ERROR EN EL REPOSITORIO", error)
-        }else{
-            error.sendStatus(200)
-        }
-    }catch(err){
-        console.error("ERROR AL INSERTAR EN FAVORITOS", err.message)
-    }finally{
-        session.release()
-    }
-    return result
-}*/
-async function addFavourites(userName, gameName, price){
+
+async function addFavourites(userName, gameName, price){ //FUNCIONA
     //const session = await pool.connect()
     let result
     try{
@@ -184,24 +117,7 @@ async function addFavourites(userName, gameName, price){
     }
     return result
 }
-/*async function createUser(user, passw){
-    const session = await pool.connect()
-    let error = ""
-    let result
-    try{
-        result = await session.query(`INSERT INTO usuarios (user_name, password) VALUES ('${user}', '${passw}')`)
-        if(!result){
-            error.status(500).send("ERROR EN EL REPOSITORIO: ", error)
-        }else{
-            error.sendStatus(200)
-        }
-    }catch(err){
-        console.error("ERROR AL CREAR USUARIO", err.message)
-    }finally{
-        session.release()
-    }
-    return result
-}*/
+
 async function createUser(user, passw){ //FUNCIONA
     //const session = await pool.connect();
     try {
@@ -221,28 +137,7 @@ async function createUser(user, passw){ //FUNCIONA
         throw err; // Propaga el error al controller
     } 
 }
-/*async function startSession(user, passw){
-    const session = await pool.connect()
-    let userRow = undefined
-    let result = []
-    let error = ""
-    try{
-        result = await session.query(`SELECT * FROM usuarios WHERE user_name = ${user} AND password = ${passw}`)
-        if(result.rows){
-            task = new Task(result.rows[0])
-        }else{
-            error.status(500).send("ERROR: USUARIO O CONTRASEÑA MAL INTRODUCIDOS")
-        }
-    }catch(err){
-        console.error("ERROR AL BUSCAR EL USUARIO", err.message)
-    }finally{
-        session.release()
-    }
-    if(result && result.rows){
-        userRow = new User(result.rows[0])
-    }
-    return userRow
-}*/
+
 async function startSession(user, passw){ //FUNCIONA
     //const session = await pool.connect()
     let userRow = undefined
@@ -267,6 +162,66 @@ async function startSession(user, passw){ //FUNCIONA
 
     return userRow
 }
+async function changePassword(userName, oldPassword, newPassword) {
+    const session = await pool.connect();
+    try {
+        // Verificar que la contraseña actual sea correcta
+        const userRes = await session.query(
+            `SELECT * FROM usuarios 
+             WHERE user_name='${userName}' AND password='${oldPassword}'`
+        );
+
+        if (!userRes.rows || userRes.rows.length === 0) {
+            return { success: false, message: "Contraseña actual incorrecta" };
+        }
+
+        // Actualizar la contraseña
+        await session.query(
+            `UPDATE usuarios 
+             SET password='${newPassword}' 
+             WHERE user_name='${userName}'`
+        );
+
+        return { success: true, message: "Contraseña actualizada correctamente" };
+    } catch (err) {
+        console.error("ERROR AL CAMBIAR CONTRASEÑA", err.message);
+        return { success: false, message: "Error al cambiar contraseña" };
+    } finally {
+        session.release();
+    }
+}
+
+// Borrar usuario
+async function deleteUser(userName, password) {
+    const session = await pool.connect();
+    try {
+        // Verificar que la contraseña sea correcta
+        const userRes = await session.query(
+            `SELECT id FROM usuarios 
+             WHERE user_name='${userName}' AND password='${password}'`
+        );
+
+        if (!userRes.rows || userRes.rows.length === 0) {
+            return { success: false, message: "Contraseña incorrecta" };
+        }
+
+        const userId = userRes.rows[0].id;
+
+        // Borrar registros relacionados (favoritos, ventas/carrito)
+        await session.query(`DELETE FROM favoritos WHERE user_id='${userId}'`);
+        await session.query(`DELETE FROM ventas WHERE user_id='${userId}'`);
+        
+        // Borrar usuario
+        await session.query(`DELETE FROM usuarios WHERE id='${userId}'`);
+
+        return { success: true, message: "Usuario eliminado correctamente" };
+    } catch (err) {
+        console.error("ERROR AL BORRAR USUARIO", err.message);
+        return { success: false, message: "Error al borrar usuario" };
+    } finally {
+        session.release();
+    }
+}
 
 export default {
     startSession: startSession,
@@ -275,6 +230,8 @@ export default {
     priceCart: priceCart,
     showCatalog,
     showFavourites,
-    addGame
+    addGame,
+    changePassword,
+    deleteUser
     //addOffer: addOffer
 }
