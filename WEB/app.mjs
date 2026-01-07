@@ -9,8 +9,9 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
 app.set("view engine", "ejs");
-app.set("views", path.join(path.resolve("."), "WEB/views"));
+app.set("views", path.join(path.resolve("."), "views"));
 
+app.use(express.static(path.join(path.resolve("."), "public")));
 app.use("/", taskRoutes);
 
 app.listen(PORT, () => {
