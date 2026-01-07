@@ -20,9 +20,9 @@ export class Favourites{
     }
 }*/
 export class Games{
-    constructor({name_game, price, description}){
+    constructor({name_game, price, image}){
         this.name_game = name_game
         this.price = price
-        this.description = description
+        this.image = image
     }
 }

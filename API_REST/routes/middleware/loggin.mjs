@@ -1,4 +1,4 @@
-import express from "express";
+/*import express from "express";
 import session from "express-session";
 const app = express();
 //MIDDLEWARE
@@ -9,7 +9,7 @@ app.use(session({
     resave: false, //NO GUARDAR LA COOKIE DE NUEVO SI NO HAY CAMBIOS
     saveUninitialized: true, //QUE SE GUARDE LA SESION AUN SIN VALORES
     cookie: {maxAge: 1000 * 60 * 30} //30 MINUTOS
-}))
+}))*/
 
 export function checkSession(req, res, next) {
     if (!req.session || !req.session.user) {
