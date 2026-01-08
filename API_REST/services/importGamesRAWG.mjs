@@ -1,10 +1,10 @@
-import rawgService from "./services/rawgService.mjs";
-import RepoTask from "./repositories/task_repository.mjs";
+import rawgService from "./rawgService.mjs";
+import RepoTask from "../repositories/task_repository.mjs";
 import 'dotenv/config';
 
-console.log("API KEY cargada:", process.env.RAWG_API_KEY);
+//console.log("API KEY cargada:", process.env.RAWG_API_KEY);
 
-async function importGames() {
+export async function importGames() {
     const juegosRAWG = await rawgService.obtenerJuegosRAWG();
 
     const juegosProcesados = juegosRAWG.map(j => ({
@@ -20,4 +20,4 @@ async function importGames() {
     console.log("Importación completada!");
 }
 
-importGames();
+export default {importGames}

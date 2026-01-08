@@ -5,20 +5,21 @@ export class User{
     }
 }
 export class Favourites{
-    constructor({user_name, name_game, price}){
+    constructor({user_name, name_game, price, image}){
         this.user_name = user_name
         this.name_game = name_game
         this.price = price
+        this.image = image
     }
 }
-/*export class Sales{
+export class Sales{
     constructor({user_name, name_game, price, offer}){
         this.user_name = user_name
         this.name_game = name_game
         this.price = price
         this.offer = offer
     }
-}*/
+}
 export class Games{
     constructor({name_game, price, image}){
         this.name_game = name_game

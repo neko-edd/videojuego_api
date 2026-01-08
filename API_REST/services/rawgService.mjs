@@ -1,4 +1,3 @@
-import fetch from "node-fetch";
 import 'dotenv/config';
 
 async function obtenerJuegosRAWG() {
@@ -12,7 +11,7 @@ async function obtenerJuegosRAWG() {
         } 
         const data = await res.json();
 
-        return data.results; // Array de juegos
+        return data.results; 
     } catch (err) {
         console.error("Error al llamar a RAWG:", err.message);
         return [];
