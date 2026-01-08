@@ -1,0 +1,104 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+}
+
+body {
+    min-height: 100vh;
+    background: linear-gradient(135deg, #1f2933, #111827);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #e5e7eb;
+}
+/*CONTENEDOR - GENERAL*/
+.auth-container {
+    width: 100%;
+    max-width: 420px;
+    padding: 20px;
+}
+
+/* CAJA + TITULO*/
+.auth-box {
+    background: #1f2937;
+    padding: 32px;
+    border-radius: 14px;
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
+}
+
+.auth-box h1 {
+    text-align: center;
+    margin-bottom: 24px;
+    font-size: 1.8rem;
+}
+
+/* FORMULARIO*/
+.form-group {
+    margin-bottom: 18px;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 6px;
+    font-size: 0.9rem;
+    color: #d1d5db;
+}
+
+.form-group input {
+    width: 100%;
+    padding: 10px 12px;
+    border-radius: 8px;
+    border: none;
+    outline: none;
+    background: #374151;
+    color: #fff;
+    font-size: 1rem;
+}
+
+.form-group input:focus {
+    outline: 2px solid #6366f1;
+}
+
+.btn-primary {
+    width: 100%;
+    padding: 12px;
+    margin-top: 10px;
+    background: #6366f1;
+    border: none;
+    border-radius: 10px;
+    font-size: 1rem;
+    font-weight: 600;
+    color: white;
+    cursor: pointer;
+    transition: background 0.2s ease;
+}
+
+.btn-primary:hover {
+    background: #4f46e5;
+}
+
+/* TEXTO CONFIRMAR */
+.auth-link {
+    margin-top: 18px;
+    text-align: center;
+    font-size: 0.9rem;
+}
+
+.auth-link a {
+    color: #818cf8;
+    text-decoration: none;
+    font-weight: 500;
+}
+
+.auth-link a:hover {
+    text-decoration: underline;
+}
+
+/* MENSAJE - #ID */
+#message {
+    margin-top: 14px;
+    text-align: center;
+    font-size: 0.9rem;
+}

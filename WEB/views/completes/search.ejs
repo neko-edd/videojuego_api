@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Iniciar Sesión</title>
+    <link rel="stylesheet" href="/css/auth.css">
+    <link rel="stylesheet" href="/css/userProfile.css">
+</head>
+<%- include('../partials/header') %>
+<div class="container">
+        <h1>📊 Estadísticas de la Tienda</h1>
+
+        <div class="dashboard-cards" id="dashboardCards">
+
+        </div>
+
+        <div class="search-section">
+            <h2>🔍 Búsqueda Avanzada</h2>
+            <form class="search-form" id="searchForm">
+                <div class="form-group">
+                    <label for="searchTerm">Nombre del Juego</label>
+                    <input type="text" id="searchTerm" placeholder="Ej: Mario, Zelda...">
+                </div>
+                <div class="form-group">
+                    <label for="minPrice">Precio Mínimo (€)</label>
+                    <input type="number" id="minPrice" min="0" step="0.01" placeholder="0">
+                </div>
+                <div class="form-group">
+                    <label for="maxPrice">Precio Máximo (€)</label>
+                    <input type="number" id="maxPrice" min="0" step="0.01" placeholder="100">
+                </div>
+                <div class="form-group">
+                    <label for="sortBy">Ordenar por</label>
+                    <select id="sortBy">
+                        <option value="name">Nombre</option>
+                        <option value="price_asc">Precio (menor)</option>
+                        <option value="price_desc">Precio (mayor)</option>
+                        <option value="popular">Más vendidos</option>
+                        <option value="favorites">Más favoritos</option>
+                    </select>
+                </div>
+                <button type="submit" class="btn-search">Buscar</button>
+            </form>
+            <div class="results-container" id="searchResults" style="margin-top: 30px;"></div>
+        </div>
+
+        <div class="charts-grid">
+            <div class="chart-container">
+                <h2>🏆 Top 10 Juegos Más Vendidos</h2>
+                <canvas id="mostSoldChart"></canvas>
+            </div>
+
+            <div class="chart-container">
+                <h2>💰 Ingresos por Rango de Precios</h2>
+                <canvas id="revenueRangeChart"></canvas>
+            </div>
+
+            <div class="chart-container">
+                <h2>❤️ Top 10 Juegos Más Favoritos</h2>
+                <canvas id="mostFavoritedChart"></canvas>
+            </div>
+	    </div>
+</div>
+<script src="/js/search.js"></script>
+
+<%- include('../partials/footer') %>
