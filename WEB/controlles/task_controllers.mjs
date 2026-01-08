@@ -1,21 +1,25 @@
-export default class WebController {
-    static async paginaPrincipal(req, res) {
-        res.render("completes/index")
+export default class task_controllers {
+    static paginaPrincipal(req, res) {
+        res.render("completes/index");
     }
 
-    static async paginaLogin(req, res) {
-        res.render("completes/login")
+    static paginaLogin(req, res) {
+        res.render("completes/login");
     }
 
-    static async paginaRegistro(req, res) {
-        res.remder("completes/register")
+    static paginaRegistro(req, res) {
+        res.render("completes/register");
     }
 
-    static async paginaFavoritos(req, res) {
-        res.render("completes/favourites")
+    static paginaFavoritos(req, res) {
+        res.render("completes/favourites");
     }
 
-    static async paginaCarrito(req, res) {
-        res.render("completes/carrito")
+    static paginaCarrito(req, res) { 
+        res.render("completes/carrito");
+    }
+
+    static paginaPerfil(req, res) {
+        res.render("completes/userProfile");
     }
 }

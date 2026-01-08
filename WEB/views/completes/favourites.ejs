@@ -1,26 +1,22 @@
 <!DOCTYPE html>
 <html lang="es">
-
 <head>
     <meta charset="UTF-8">
-    <title>Mis Favoritos</title>
-    <link rel="stylesheet" href="/css/favorites.css">
-    <script src="js/favourites.js"></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Favoritos</title>
+    <link rel="stylesheet" href="/css/auth.css">
 </head>
+<%- include('../partials/header') %>
 
-<body>
-    <main>
-        <div id="favorites-container">
-            <table class="fav-table">
-                <tr>
-                    <th>Nombre</th>
-                    <th>Precio</th>
-                    <th>Acciones</th>
-                </tr>
-            </table>
-        </div>
-    </main>
-    <script>
-        favourites();
-    </script>
-</html>
+
+<div class="container">
+    <h2>❤️ Mis Favoritos</h2>
+    <div id="favouritesContainer">
+        <div class="loading">Cargando favoritos...</div>
+    </div>
+</div>
+
+<script src="/js/favourites.js"></script>
+
+<%- include('../partials/footer') %>
+

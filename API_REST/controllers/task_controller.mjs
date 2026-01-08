@@ -14,8 +14,8 @@ export default class task_controllers {
     }
     static async startSession(req, res) {
         const { user_name, password } = req.body
-        if(!user_name || !password){
-            return res.status(400).json({message: "Datos incompletos"})
+        if (!user_name || !password) {
+            return res.status(400).json({ message: "Datos incompletos" })
         }
         try {
 
@@ -27,9 +27,17 @@ export default class task_controllers {
                 })
             }
 
+            req.session.user = {
+                user_name: user.user_name
+            };
+
             return res.status(200).json({
-                user: user
+                success: true,
+                user: {
+                    user_name: user.user_name
+                }
             })
+
         } catch (error) {
             console.error("Error login:", error.message);
             return res.status(500).json({
@@ -39,22 +47,26 @@ export default class task_controllers {
     }
 
     static async createUser(req, res) {
-        const { user_name, password } = req.body
+        const { user_name, password } = req.body;
+
+        console.log("Datos recibidos en createUser:", { user_name, password });
+
         if (!user_name || !password) {
-            return res.status(400).json({ message: "Datos incompletos" })
+            return res.status(400).json({ message: "Datos incompletos" });
         }
+
         try {
-            const userId = await task_repository.createUser(user_name, password)
-            if (!userId) {
-                return res.status(400).json({ message: "No se pudo crear el usuario" })
-            }
-            return res.status(200).json({
+            const userId = await task_repository.createUser(user_name, password);
+            return res.status(201).json({
                 success: true,
                 userId
-            })
-
+            });
         } catch (error) {
-            return res.status(500).json({ error: "Error al crear el usuario" })
+            console.error("ERROR createUser controller:", error); // log completo
+            if (error?.code === "23505") {
+                return res.status(400).json({ message: "Usuario ya existe" });
+            }
+            return res.status(500).json({ message: "Error al crear el usuario" });
         }
     }
 
@@ -70,7 +82,8 @@ export default class task_controllers {
     }
 
     static async addFavourites(req, res) {
-        const { userName, gameName, price } = req.body
+        const userName = req.session.user?.user_name;
+        const { gameName, price } = req.body
         if (!userName || !gameName || price === undefined) {
             res.status(400).json({ message: "No se ha seleccionado ningun juego" })
         }
@@ -86,36 +99,134 @@ export default class task_controllers {
     }
 
     static async showFavourites(req, res) {
-        const { userName } = req.body
         try {
-            const favourites = await task_repository.showFavourites(userName)
+            console.log("SESSION COMPLETA:", req.session);
+            console.log("USER EN SESSION:", req.session.user);
 
-            res.status(200).json({ favourites })
-        } catch (error) {
-            console.error("Error mostrando los favorito:", error)
-            res.status(500).json({ message: "Error al cargar los favoritos" })
+            const favourites = await task_repository.showFavourites(
+                req.session.user.user_name
+            );
+
+            res.status(200).json(favourites);
+        } catch (err) {
+            console.error("ERROR showFavourites controller:", err);
+            res.status(500).json({ error: "Error cargando favoritos" });
         }
     }
 
-    static async priceCart(req, res) {
-        const { userName, gameName, price, activate } = req.body
-        if (!userName && !gameName && price === undefined && activate === undefined) {
-            return res.status(400).json({ message: "Datos incompletos" })
+    static async addPriceCart(req, res) {
+        const userName = req.session.user?.user_name;
+        const { gameName, price } = req.body;
+
+        if (!userName) {
+            return res.status(401).json({ message: "No hay sesión activa" });
         }
+
+        if (!gameName || price === undefined) {
+            return res.status(400).json({ message: "Datos incompletos" });
+        }
+
         try {
-            const carrito = await task_repository.priceCart(userName, gameName, price, activate)
+            const result = await task_repository.addPriceCart(userName, gameName, price);
+
             return res.status(200).json({
-                carrito: {
-                    id: carrito.id,
-                    user_id: carrito.user_id,
-                    game_id: carrito.game_id,
-                    price: carrito.price,
-                    offer: carrito.offer
-                }
-            })
+                success: true,
+                message: "Juego añadido al carrito",
+                carrito: result
+            });
         } catch (error) {
-            console.error("Error al añadir al carrito:", error)
-            res.status(500).json({ message: "Error al añadir al favoritos" })
+            console.error("Error al añadir al carrito:", error);
+            return res.status(500).json({
+                success: false,
+                message: "Error al añadir al carrito"
+            });
+        }
+    }
+    static async showCart(req, res) {
+        try {
+
+            const userName = req.session.user?.user_name;
+
+            if (!userName) {
+                return res.status(401).json({ message: "No hay sesión activa" });
+            }
+
+            const carrito = await task_repository.showCart(userName);
+            console.log("Carrito a enviar:", carrito);
+            return res.status(200).json({ carrito });
+        } catch (err) {
+            console.error("ERROR showCart controller:", err);
+            return res.status(500).json({ error: "Error cargando carrito" });
+        }
+    }
+    static async changePassword(req, res) {
+        const userName = req.session.user?.user_name;
+        const { oldPassword, newPassword } = req.body;
+
+        if (!userName) {
+            return res.status(401).json({ message: "No hay sesión activa" });
+        }
+
+        if (!oldPassword || !newPassword) {
+            return res.status(400).json({ message: "Datos incompletos" });
+        }
+
+        try {
+            const result = await task_repository.changePassword(userName, oldPassword, newPassword);
+
+            if (result.success) {
+                return res.status(200).json(result);
+            } else {
+                return res.status(400).json(result);
+            }
+        } catch (error) {
+            console.error("Error al cambiar contraseña:", error);
+            return res.status(500).json({ message: "Error al cambiar contraseña" });
+        }
+    }
+
+    static async deleteUser(req, res) {
+        const userName = req.session.user?.user_name;
+        const { password } = req.body;
+
+        if (!userName) {
+            return res.status(401).json({ message: "No hay sesión activa" });
+        }
+
+        if (!password) {
+            return res.status(400).json({ message: "Se requiere la contraseña" });
+        }
+
+        try {
+            const result = await task_repository.deleteUser(userName, password);
+
+            if (result.success) {
+                req.session.destroy((err) => {
+                    if (err) {
+                        console.error("Error al destruir sesión:", err);
+                    }
+                });
+
+                return res.status(200).json(result);
+            } else {
+                return res.status(400).json(result);
+            }
+        } catch (error) {
+            console.error("Error al borrar usuario:", error);
+            return res.status(500).json({ message: "Error al borrar usuario" });
+        }
+    }
+
+    static getSession(req, res) {
+        if (req.session && req.session.user) {
+            return res.status(200).json({
+                authenticated: true,
+                user: req.session.user
+            });
+        } else {
+            return res.status(401).json({
+                authenticated: false
+            });
         }
     }
 }

@@ -1,32 +1,21 @@
-<!-- <%/* include('../partials/header')*/%>
-<%/* include('../partials/header')*/%>
-<%/* include('../partials/header')*/%> -->
-
 <!DOCTYPE html>
 <html lang="es">
 <head>
     <meta charset="UTF-8">
-    <title>Tienda de Juegos - Inicio</title>
-    <link rel="stylesheet" href="/css/index.css">
-    <script src="/js/catalog.js"></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pagina Principal</title>
+    <link rel="stylesheet" href="/css/auth.css">
 </head>
-<body>
-    <!-- <%- include('partials/header') %> -->
-    <!-- <%- include('partials/navbar') %> -->
-    <main>
-        <section id="catalogSection">
-            <h2>Catálogo de Juegos</h2>
-            <p>Encuentra tus títulos favoritos al mejor precio</p>
+<%- include('../partials/header') %>
 
-            <div id="catalogContainer">
-                <p class="loading">Cargando catálogo...</p>
-            </div>
-        </section>
-    </main>
-    <script>
-        cargarCatalogo()
-        verificarSesion()
-    </script>
-    <!-- <%- include('partials/footer') %> -->
-</body>
-</html>
+<div class="container">
+    <h2>Catálogo de Juegos</h2>
+    <div id="catalogContainer">
+        <div class="loading">Cargando juegos...</div>
+    </div>
+</div>
+
+<script src="/js/catalog.js"></script>
+
+<%- include('../partials/footer') %>
+
