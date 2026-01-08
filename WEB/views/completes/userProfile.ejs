@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Iniciar Sesión</title>
+    <link rel="stylesheet" href="/css/auth.css">
+    <link rel="stylesheet" href="/css/userProfile.css">
+</head>
+<%- include('../partials/header') %>
+
+<div class="container">
+    <div class="profile-container">
+        <h2>Mi Perfil</h2>
+        
+        <!-- Cambiar contraseña -->
+        <div class="profile-section">
+            <h3>Cambiar Contraseña</h3>
+            <form id="changePasswordForm">
+                <div class="form-group">
+                    <label for="oldPassword">Contraseña Actual</label>
+                    <input type="password" id="oldPassword" name="oldPassword" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="newPassword">Nueva Contraseña</label>
+                    <input type="password" id="newPassword" name="newPassword">
+                </div>
+                
+                <div class="form-group">
+                    <label for="confirmNewPassword">Confirmar Nueva Contraseña</label>
+                    <input type="password" id="confirmNewPassword" name="confirmNewPassword" required>
+                </div>
+                
+                <button type="submit" class="btn-primary">Cambiar Contraseña</button>
+                <div id="changePasswordMessage"></div>
+            </form>
+        </div>
+        <div class="profile-section danger-zone">
+            <h3>Zona de Peligro</h3>
+            <p>Una vez que borres tu cuenta, no hay vuelta atrás. Por favor, está seguro.</p>
+            
+            <form id="deleteUserForm">
+                <div class="form-group">
+                    <label for="deletePassword">Confirma tu contraseña para borrar la cuenta</label>
+                    <input type="password" id="deletePassword" name="deletePassword" required>
+                </div>
+                
+                <button type="submit" class="btn-danger">Borrar Mi Cuenta</button>
+                <div id="deleteUserMessage"></div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<script src="/js/userProfile.js"></script>
+
+<%- include('../partials/footer') %>

@@ -1,3 +1,17 @@
-<header>
-  <h1>Mi Aplicación</h1>
-</header>
+<html>
+  <header class="navbar">
+    <div class="navbar-brand">
+        <h1>🎮 GameStore</h1>
+    </div>
+    
+    <ul class="navbar-menu">
+        <li><a href="/">Inicio</a></li>
+        <li><a href="/">Catálogo</a></li>
+        <li><a href="#" onclick="irAFavoritos(); return false;">Favoritos</a></li>
+        <li><a href="/carrito">🛒 Carrito</a></li>
+    </ul>
+    
+    <div class="navbar-user" id="userInfo">
+        <a href="/login" class="btn-login">👤 Iniciar Sesión</a>
+    </div>
+  </header>

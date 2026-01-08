@@ -16,7 +16,7 @@ export default class task_controllers {
     }
 
     static paginaCarrito(req, res) { 
-        res.render("completes/carrito");
+        res.render("completes/cart");
     }
 
     static paginaPerfil(req, res) {

@@ -27,6 +27,9 @@ document.getElementById("registerForm").addEventListener("submit", async (e) => 
 
         message.textContent = "Registro correcto, ya puedes iniciar sesión";
         message.style.color = "green";
+        setTimeout(() => {
+                window.location.href = '/';
+            }, 1000);
 
     } catch (err) {
         console.error(err);

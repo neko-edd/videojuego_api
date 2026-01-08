@@ -1,26 +1,92 @@
 const API_URL = 'http://localhost:60000';
-async function favourites() {
+let currentUser = null;
+
+async function verificarSesion() {
     try {
-        const res = await fetch(`${API_URL}/favoritos`);
-        const { favoritos } = await res.json()
-
-        const container = getElementById('favorites-container')
-        if (favoritos.length === 0) {
-            container.innerHTML = '<p class="loading">No hay ningun favorito</p>';
-            return;
+        const res = await fetch(`${API_URL}/get-session`, {
+            credentials: 'include'
+        });
+        
+        if (res.status === 401) {
+            console.log('No hay sesión activa');
+            currentUser = null;
+            return false;
         }
-
-        container.innerHTML = favoritos.map(fav => `
-            <tr>
-                <td>${fav.nombre}</td>
-                <td>${fav.precio}€</td>
-            </tr>
-        `).join('');
-
-        console.log(`✅ ${favoritos.length} favoritos cargados`);
+        
+        if (!res.ok) {
+            throw new Error(`Error ${res.status}`);
+        }
+        
+        const data = await res.json();
+        
+        if (data.authenticated) {
+            currentUser = data.user;
+            actualizarNavbar();
+            return true;
+        }
+        return false;
     } catch (err) {
-        console.error('Error al cargar favoritos:', err);
-        document.getElementById('favorites-container').innerHTML =
-            '<p class="loading">Error al cargar los favoritos.</p>';
+        console.error('Error al verificar sesión:', err);
+        currentUser = null;
+        return false;
     }
 }
+
+function actualizarNavbar() {
+    const userInfo = document.getElementById('userInfo');
+    if (currentUser) {
+        userInfo.innerHTML = `
+            <a href="/perfil">Perfil</a>
+            <span class="user-name">${currentUser.user_name}</span>
+            <a href="#" onclick="cerrarSesion(); return false;">Cerrar Sesión</a>
+        `;
+    } else {
+        userInfo.innerHTML = `
+            <a href="/login" class="btn-login">Iniciar Sesión</a>
+        `;
+    }
+}
+
+async function cargarFavoritos() {
+    const sesionActiva = await verificarSesion();
+    
+    try {
+        const res = await fetch(`${API_URL}/favoritos`, {
+            method: 'GET',
+            credentials: 'include'
+        });
+        
+        if (res.status === 401) {
+            document.getElementById('favouritesContainer').innerHTML = 
+                '<p class="loading">Debes <a href="/login">iniciar sesión</a> para ver tus favoritos</p>';
+            return;
+        }
+        
+        const favourites = await res.json();
+        
+        const container = document.getElementById('favouritesContainer');
+        
+        if (favourites.length === 0) {
+            container.innerHTML = '<p class="loading">No tienes favoritos aún. <a href="/">Ver catálogo</a></p>';
+            return;
+        }
+        
+        container.innerHTML = favourites.map(fav => `
+            <div class="game-card">
+                <img src="${fav.image}" 
+                     alt="${fav.name_game}">
+                <div class="game-info">
+                    <h3>${fav.name_game}</h3>
+                    <p class="price">$${fav.price}</p>
+                </div>
+            </div>
+        `).join('');
+        
+    } catch (err) {
+        console.error('Error:', err);
+        document.getElementById('favouritesContainer').innerHTML = 
+            '<p class="loading">Error al cargar favoritos</p>';
+    }
+}
+
+cargarFavoritos();

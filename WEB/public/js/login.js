@@ -22,11 +22,11 @@ document.getElementById('loginForm').addEventListener('submit', async (e) => {
                 window.location.href = '/';
             }, 1000);
         } else {
-            showMessage('❌ ' + (data.message || 'Credenciales incorrectas'), 'error');
+            showMessage((data.message || 'Credenciales incorrectas'), 'error');
         }
     } catch (err) {
         console.error('Error:', err);
-        showMessage('❌ Error al iniciar sesión', 'error');
+        showMessage('Error al iniciar sesión', 'error');
     }
 });
 

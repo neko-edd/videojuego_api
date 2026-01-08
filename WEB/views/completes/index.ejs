@@ -10,6 +10,51 @@
 
 <div class="container">
     <h2>Catálogo de Juegos</h2>
+    
+    <!-- Sección de Búsqueda Avanzada -->
+    <div class="search-section">
+        <h3>🔍 Búsqueda Avanzada</h3>
+        <form class="search-form" id="searchForm">
+            <div class="form-group">
+                <label for="searchTerm">Nombre del Juego</label>
+                <input type="text" id="searchTerm" placeholder="Ej: Mario, Zelda...">
+            </div>
+            <div class="form-group">
+                <label for="minPrice">Precio Mínimo (€)</label>
+                <input type="number" id="minPrice" min="0" step="0.01" placeholder="0">
+            </div>
+            <div class="form-group">
+                <label for="maxPrice">Precio Máximo (€)</label>
+                <input type="number" id="maxPrice" min="0" step="0.01" placeholder="100">
+            </div>
+            <div class="form-group">
+                <label for="sortBy">Ordenar por</label>
+                <select id="sortBy">
+                    <option value="name">Nombre</option>
+                    <option value="price_asc">Precio (menor a mayor)</option>
+                    <option value="price_desc">Precio (mayor a menor)</option>
+                    <option value="popular">Más vendidos</option>
+                    <option value="favorites">Más favoritos</option>
+                </select>
+            </div>
+            <div style="grid-column: 1 / -1; display: flex; gap: 10px;">
+                <button type="submit" class="btn-search">Buscar</button>
+                <button type="button" class="btn-clear" onclick="clearSearch()">Limpiar</button>
+            </div>
+        </form>
+        <div class="results-info" id="resultsInfo" style="display: none;"></div>
+    </div>
+
+    <!-- Sección de Juegos Más Favoritos -->
+    <div class="stats-section">
+        <h3>❤️ Top 10 Juegos Más Favoritos</h3>
+        <div id="mostFavoritedContainer">
+            <div class="loading">Cargando juegos favoritos...</div>
+        </div>
+    </div>
+
+    <!-- Catálogo Principal -->
+    <h3>📚 Todos los Juegos</h3>
     <div id="catalogContainer">
         <div class="loading">Cargando juegos...</div>
     </div>
@@ -18,4 +63,3 @@
 <script src="/js/catalog.js"></script>
 
 <%- include('../partials/footer') %>
-
